@@ -9,8 +9,8 @@ from dotenv import load_dotenv
 # Load environment variables from .env
 load_dotenv()
 
-# Access the API key from the environment
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# Initialize OpenAI client
+client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # 🎤 Initialize recognizer and text-to-speech engine
 recognizer = sr.Recognizer()
@@ -55,8 +55,8 @@ def chat():
         messages.append({"role": "user", "content": user_input})
 
         try:
-            response = openai.chat.completions.create(
-                model="gpt-4",  # or "gpt-3.5-turbo"
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo",  # ✅ Use GPT-3.5 here
                 messages=messages
             )
             reply = response.choices[0].message.content
@@ -68,3 +68,4 @@ def chat():
 
 if __name__ == "__main__":
     chat()
+

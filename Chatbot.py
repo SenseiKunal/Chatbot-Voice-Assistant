@@ -7,9 +7,10 @@ from dotenv import load_dotenv
 # Load environment variables from .env
 load_dotenv()
 
-# Access the API key from the environment
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# ✅ Initialize OpenAI client
+client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+# 🕒 Get current time in India
 india = pytz.timezone("Asia/Kolkata")
 time_now = datetime.now(india)
 print("Current time in India:", time_now.strftime("%I:%M %p"))
@@ -27,15 +28,15 @@ def chat_with_openai():
         messages.append({"role": "user", "content": user_input})
 
         try:
-            response = openai.chat.completions.create(
-                model="gpt-4", 
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo",  # ✅ GPT 3.5
                 messages=messages
             )
             reply = response.choices[0].message.content
             print("🤖:", reply)
             messages.append({"role": "assistant", "content": reply})
         except Exception as e:
-            print("Error:", e)
+            print("❌ Error:", e)
 
 if __name__ == "__main__":
     chat_with_openai()
